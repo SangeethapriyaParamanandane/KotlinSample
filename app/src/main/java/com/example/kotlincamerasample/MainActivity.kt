@@ -19,20 +19,27 @@ import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
+import com.example.mylibrary.FirstClass
+import com.example.mylibrary.Sample
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 import java.util.*
 
-class MainActivity : AppCompatActivity(){
+
+class MainActivity : AppCompatActivity(),Sample{
     private var txt: TextView ? = null
     private var btn: Button? = null
+    private var activity:Activity? = null
+
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
+        activity = this
 
         btn = findViewById<View>(R.id.btn) as Button
         txt = findViewById<View>(R.id.txt) as TextView
@@ -88,6 +95,7 @@ class MainActivity : AppCompatActivity(){
     }
 
     fun pickImageFromGallery() {
+        FirstClass(activity,"Gallery")
 
       //  val intent = Intent(Intent.ACTION_PICK)
        // intent.type = "image/*"
@@ -168,4 +176,8 @@ class MainActivity : AppCompatActivity(){
         val PERMISSION_CODE = 1001;
         val IMAGE_DIRECTORY = "/demonuts"
         val CAMERA = 2    }
+
+    override fun geturi(uri: Uri?) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
 }
