@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import com.example.mylibrary.FirstClass
@@ -20,6 +21,7 @@ import com.example.mylibrary.Sample
 class MainActivity : AppCompatActivity(), Sample {
     private var txt: TextView? = null
     private var btn: Button? = null
+    private var img: ImageView? = null
     private var activity: Activity? = null
 
 
@@ -30,6 +32,7 @@ class MainActivity : AppCompatActivity(), Sample {
 
         btn = findViewById<View>(R.id.btn) as Button
         txt = findViewById<View>(R.id.txt) as TextView
+        img = findViewById<View>(R.id.img) as ImageView
 
 
         btn!!.setOnClickListener(View.OnClickListener {
@@ -93,7 +96,8 @@ class MainActivity : AppCompatActivity(), Sample {
 
     override fun geturi(uri: Uri?) {
         txt!!.setText(uri.toString())
-        Toast.makeText(this, uri.toString(), Toast.LENGTH_SHORT).show()
+        img!!.setImageURI(uri)
+        //Toast.makeText(this, uri.toString(), Toast.LENGTH_SHORT).show()
 
 
     }
