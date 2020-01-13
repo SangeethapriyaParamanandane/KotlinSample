@@ -1,31 +1,69 @@
 package com.example.mylibrary
 
+import android.Manifest
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
-import android.media.MediaScannerConnection
 import android.net.Uri
+import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
-import android.util.Log
+import android.content.Context
+
 import android.widget.Toast
+import androidx.core.app.ActivityCompat.requestPermissions
+import androidx.core.content.ContextCompat.checkSelfPermission
 
 import java.io.*
 import java.util.*
 
 
-class FirstClass(ac: Activity?) {
+class FirstClass(ac: Activity?, ctx: Context?) {
 
     var activity: Activity? = ac
 
 
     init {
-        showPictureDialog()
+        checkpermission(ctx, ac)
     }
 
 
-    private fun showPictureDialog() {
+    fun checkpermission(ctx: Context?, ac: Activity?) {
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (checkSelfPermission(
+                    ctx!!,
+                    Manifest.permission.READ_EXTERNAL_STORAGE
+                ) == PackageManager.PERMISSION_DENIED
+                && checkSelfPermission(
+                    ctx!!,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE
+                ) == PackageManager.PERMISSION_DENIED
+                && checkSelfPermission(
+                    ctx!!,
+                    Manifest.permission.CAMERA
+                ) == PackageManager.PERMISSION_DENIED
+            ) {
+                val permissions = arrayOf(
+                    Manifest.permission.READ_EXTERNAL_STORAGE,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                    Manifest.permission.CAMERA
+                );
+                requestPermissions(ac!!, permissions, 1001);
+            } else {
+                showPictureDialog()
+            }
+
+        } else {
+            showPictureDialog()
+        }
+
+    }
+
+
+    fun showPictureDialog() {
         val pictureDialog = AlertDialog.Builder(activity)
         pictureDialog.setTitle("Select Action")
         val pictureDialogItems = arrayOf("Select photo from gallery", "Capture photo from camera")
@@ -65,11 +103,29 @@ class FirstClass(ac: Activity?) {
                 sample.geturi(data?.data)
             } else if (requestCode == 2) {
                 val thumbnail = data!!.extras!!.get("data") as Bitmap
-                saveImage(thumbnail, ac)
                 var gh: String = savebitmap(thumbnail)
                 sample.geturi(Uri.fromFile(File(gh)))
 
                 Toast.makeText(ac, "Image Saved!", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+
+        fun onRequestPermissionsResult(
+            requestCode: Int,
+            permissions: Array<out String>,
+            grantResults: IntArray,
+            activity: Activity?,
+            context: Context?
+        ) {
+            when (requestCode) {
+                1001 -> {
+                    if (grantResults.size > 0 && grantResults[0] ==
+                        PackageManager.PERMISSION_GRANTED
+                    ) {
+                        FirstClass(activity, context)
+                    }
+                }
             }
         }
 
@@ -79,10 +135,16 @@ class FirstClass(ac: Activity?) {
                 Environment.getExternalStorageDirectory().toString()
             var outStream: OutputStream? = null
             // String temp = null;
-            var file = File(extStorageDirectory, "temp.png")
+            var file = File(
+                extStorageDirectory,
+                Calendar.getInstance().getTimeInMillis().toString() + ".png"
+            )
             if (file.exists()) {
                 file.delete()
-                file = File(extStorageDirectory, "temp.png")
+                file = File(
+                    extStorageDirectory,
+                    Calendar.getInstance().getTimeInMillis().toString() + ".png"
+                )
             }
             try {
                 outStream = FileOutputStream(file)
@@ -97,42 +159,6 @@ class FirstClass(ac: Activity?) {
         }
 
 
-        fun saveImage(myBitmap: Bitmap, ac: Activity?): String {
-            val bytes = ByteArrayOutputStream()
-            myBitmap.compress(Bitmap.CompressFormat.JPEG, 90, bytes)
-            val wallpaperDirectory =
-                File((Environment.getExternalStorageDirectory()).toString() + "Demonut")
-            Log.d("fee", wallpaperDirectory.toString())
-
-
-            if (!wallpaperDirectory.exists())
-
-                try {
-                    Log.d("heel", wallpaperDirectory.toString())
-                    val f = File(
-                        wallpaperDirectory,
-                        ((Calendar.getInstance().getTimeInMillis()).toString() + ".jpg")
-                    )
-                    f.getParentFile().mkdirs();
-                    f.createNewFile()
-                    val fo = FileOutputStream(f)
-                    fo.write(bytes.toByteArray())
-                    MediaScannerConnection.scanFile(
-                        ac,
-                        arrayOf(f.getPath()),
-                        arrayOf("image/jpeg"),
-                        null
-                    )
-                    fo.close()
-                    Log.d("TAG", "File Saved::--->" + f.getAbsolutePath())
-
-                    return f.getAbsolutePath()
-                } catch (e1: IOException) {
-                    e1.printStackTrace()
-                }
-
-            return ""
-        }
     }
 
 
