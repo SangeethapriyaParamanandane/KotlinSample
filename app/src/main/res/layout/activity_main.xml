@@ -22,12 +22,35 @@
         android:text="Images"
         tools:ignore="MissingConstraints" />
 
+    <CheckBox
+        android:id="@+id/enble"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/btn"/>
 
 
     <ImageView
         android:id="@+id/img"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_centerInParent="true"/>
+
+
+
+
+    <ImageView
+        android:id="@+id/thumbnailimg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        />
+
+    <VideoView
+        android:id="@+id/video"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
         android:layout_centerInParent="true"/>
 
 </RelativeLayout>
