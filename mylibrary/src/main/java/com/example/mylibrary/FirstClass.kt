@@ -134,9 +134,15 @@ class FirstClass(ac: Activity?, ctx: Context?, wantVideo: Boolean?) {
 
 
     object ConnectivityUtils {
-        fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?, ac: Activity?, sample: Sample) {
+        fun onActivityResult(
+            requestCode: Int,
+            resultCode: Int,
+            data: Intent?,
+            ac: Activity?,
+            sample: Sample
+        ) {
 
-            if(data != null) {
+            if (data != null) {
                 val bitmap = getThumbnailPath(data?.data, ac)
 
 
@@ -185,7 +191,7 @@ class FirstClass(ac: Activity?, ctx: Context?, wantVideo: Boolean?) {
         }
 
 
-        fun getThumbnailPath(uri: Uri?,ac: Activity?): Bitmap? {
+        fun getThumbnailPath(uri: Uri?, ac: Activity?): Bitmap? {
             val filePathColumn = arrayOf(MediaStore.Images.Media.DATA)
             val cursor = ac!!.contentResolver.query(uri!!, filePathColumn, null, null, null)
             cursor!!.moveToFirst()
@@ -194,26 +200,13 @@ class FirstClass(ac: Activity?, ctx: Context?, wantVideo: Boolean?) {
             val picturePath = cursor.getString(columnIndex)
             cursor!!.close()
 
-            val bitmap = ThumbnailUtils.createVideoThumbnail(picturePath, MediaStore.Video.Thumbnails.MICRO_KIND)
+            val bitmap = ThumbnailUtils.createVideoThumbnail(
+                picturePath,
+                MediaStore.Video.Thumbnails.MICRO_KIND
+            )
             return bitmap
 
         }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
         private fun savebitmap(bmp: Bitmap): String {
@@ -227,7 +220,8 @@ class FirstClass(ac: Activity?, ctx: Context?, wantVideo: Boolean?) {
             if (file.exists()) {
                 file.delete()
                 file = File(
-                    extStorageDirectory, Calendar.getInstance().getTimeInMillis().toString() + ".png"
+                    extStorageDirectory,
+                    Calendar.getInstance().getTimeInMillis().toString() + ".png"
                 )
             }
             try {
