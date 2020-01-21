@@ -60,14 +60,7 @@ class MainActivity : AppCompatActivity(), Sample {
         permissions: Array<out String>,
         grantResults: IntArray
     ) {
-        FirstClass.ConnectivityUtils.onRequestPermissionsResult(
-            requestCode,
-            permissions,
-            grantResults,
-            activity,
-            context,
-            wantVideo
-        )
+        FirstClass.ConnectivityUtils.onRequestPermissionsResult(requestCode, permissions, grantResults, activity, context, wantVideo)
 
     }
 
@@ -81,11 +74,11 @@ class MainActivity : AppCompatActivity(), Sample {
     override fun geturi(
         uri: Uri?,
         isvideo: Boolean?,
-        bitmap: Bitmap?
+        thumbnailuri: Uri?
     ) {
 
 
-        thumbnailimg!!.setImageBitmap(bitmap)
+        thumbnailimg!!.setImageURI(thumbnailuri)
 
 
 
